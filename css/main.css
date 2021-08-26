@@ -5,3 +5,43 @@
   margin: 0;
   padding: 0;
 }
+
+:root {
+  font-size: clamp (16px, 2.5vw, 24px);
+}
+
+h1 {
+  text-align: center;
+}
+
+main {
+  background: black;
+  display: grid;
+  gap: 0.25em;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  width: 20rem;
+  height: 20rem;
+  margin: 0 auto;
+}
+
+div {
+  background: white;
+}
+
+form {
+  display: flex;
+  gap: 0.5em;
+  flex-direction: column;
+  font-size: 1rem;
+  margin: 2em;
+}
+
+input,
+button {
+  font-size: inherit;
+}
+
+button {
+  margin-top: 1em;
+}
