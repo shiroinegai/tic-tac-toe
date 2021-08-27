@@ -51,6 +51,12 @@ button {
   margin-top: 1em;
 }
 
+.display {
+  flex-direction: column;
+  max-width: 20rem;
+  margin: 0 auto;
+}
+
 .message {
   margin-top: 2em;
 }

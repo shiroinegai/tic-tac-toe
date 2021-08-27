@@ -18,6 +18,20 @@ const game = (() => {
     form.classList.toggle("hidden");
   });
 
+  const restart = document.querySelector(".restart");
+  restart.addEventListener("click", () => {
+    boardState.fill("");
+    isRunning = false;
+    winner = null;
+    round = 1;
+    board.querySelectorAll("div").forEach((node) => {
+      node.innerText = "";
+    });
+    board.addEventListener("click", handleBoardClick);
+    display.toggleDisplay();
+    form.classList.toggle("hidden");
+  });
+
   function handleBoardClick(e) {
     if (!isRunning) {
       return;
@@ -28,6 +42,7 @@ const game = (() => {
         if (checkWinner(game.player1.mark)) {
           winner = game.player1.name;
           display.setMessage(`${winner} wins!`);
+          display.toggleDisplay();
         }
         round++;
       } else {
@@ -35,11 +50,13 @@ const game = (() => {
         if (checkWinner(game.player2.mark)) {
           winner = game.player2.name;
           display.setMessage(`${winner} wins!`);
+          display.toggleDisplay();
         }
         round++;
       }
       if (round > 9 && !winner) {
         display.setMessage(`It's a draw!`);
+        display.toggleDisplay();
       }
     }
   }
@@ -97,19 +114,20 @@ const game = (() => {
     set player2(name) {
       player2 = createPlayer(name, "x");
     },
-    get winner() {
-      return winner;
-    },
   };
 })();
 
 const display = (() => {
+  const displayNode = document.querySelector(".display");
   const message = document.querySelector(".message");
 
   const setMessage = (text) => {
     message.innerText = text;
-    message.classList.toggle("hidden");
   };
 
-  return { setMessage };
+  const toggleDisplay = () => {
+    displayNode.classList.toggle("hidden");
+  };
+
+  return { setMessage, toggleDisplay };
 })();
