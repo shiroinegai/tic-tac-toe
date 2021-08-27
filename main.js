@@ -2,21 +2,11 @@ console.log("Tic Tac Toe is running.");
 
 const game = (() => {
   const boardState = Array(9).fill("");
+  let winner;
   let round = 1;
 
   const board = document.querySelector("main");
-  board.addEventListener("click", (e) => {
-    console.log(e.target);
-    if (e.target.tagName === "DIV" && e.target.innerText === "") {
-      if (round % 2 !== 0) {
-        game.player1.placeMark(e.target.dataset.index);
-        round++;
-      } else {
-        game.player2.placeMark(e.target.dataset.index);
-        round++;
-      }
-    }
-  });
+  board.addEventListener("click", handleBoardClick);
 
   const form = document.querySelector("form");
   form.addEventListener("submit", (e) => {
@@ -25,6 +15,61 @@ const game = (() => {
     game.player2 = document.getElementById("player2").value;
     form.classList.toggle("hidden");
   });
+
+  function handleBoardClick(e) {
+    if (e.target.tagName === "DIV" && e.target.innerText === "") {
+      if (round % 2 !== 0) {
+        game.player1.placeMark(e.target.dataset.index);
+        if (checkWinner(game.player1.mark)) {
+          winner = game.player1.name;
+          display.setMessage(`${winner} wins!`);
+        }
+        round++;
+      } else {
+        game.player2.placeMark(e.target.dataset.index);
+        if (checkWinner(game.player2.mark)) {
+          winner = game.player2.name;
+          display.setMessage(`${winner} wins!`);
+        }
+        round++;
+      }
+      if (round > 9 && !winner) {
+        display.setMessage(`It's a draw!`);
+      }
+    }
+  }
+
+  function checkWinner(mark) {
+    if (
+      (boardState[0] === mark &&
+        boardState[1] === mark &&
+        boardState[2] === mark) ||
+      (boardState[3] === mark &&
+        boardState[4] === mark &&
+        boardState[5] === mark) ||
+      (boardState[6] === mark &&
+        boardState[7] === mark &&
+        boardState[7] === mark) ||
+      (boardState[0] === mark &&
+        boardState[3] === mark &&
+        boardState[6] === mark) ||
+      (boardState[1] === mark &&
+        boardState[4] === mark &&
+        boardState[7] === mark) ||
+      (boardState[2] === mark &&
+        boardState[5] === mark &&
+        boardState[8] === mark) ||
+      (boardState[0] === mark &&
+        boardState[4] === mark &&
+        boardState[8] === mark) ||
+      (boardState[2] === mark &&
+        boardState[4] === mark &&
+        boardState[6] === mark)
+    ) {
+      board.removeEventListener("click", handleBoardClick);
+      return true;
+    }
+  }
 
   function createPlayer(name, mark) {
     const placeMark = (index) => {
@@ -35,9 +80,6 @@ const game = (() => {
   }
 
   return {
-    get board() {
-      return board;
-    },
     get player1() {
       return player1;
     },
@@ -49,6 +91,9 @@ const game = (() => {
     },
     set player2(name) {
       player2 = createPlayer(name, "x");
+    },
+    get winner() {
+      return winner;
     },
   };
 })();
